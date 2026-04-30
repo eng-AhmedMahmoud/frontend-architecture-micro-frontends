@@ -6,6 +6,7 @@ const shared = {
   "@tanstack/react-query": { singleton: true, eager: true, requiredVersion: false },
   "@commerceos/shared": { singleton: true, eager: true, requiredVersion: false },
   "@commerceos/ui": { singleton: true, eager: true, requiredVersion: false },
+  recharts: { singleton: true, eager: true, requiredVersion: false },
 };
 
 export default reactRsbuildConfig({
