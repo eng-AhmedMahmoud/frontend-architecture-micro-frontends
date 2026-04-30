@@ -4,7 +4,7 @@ import { defineConfig } from "@rsbuild/core";
 import { pluginReact } from "@rsbuild/plugin-react";
 import tailwindcss from "@tailwindcss/postcss";
 
-export function reactRsbuildConfig({ dirname = process.cwd(), plugins = [], alias = {} } = {}) {
+export function reactRsbuildConfig({ dirname = process.cwd(), plugins = [], alias = {}, server = {}, other = {} } = {}) {
   const apiTarget = process.env.COMMERCEOS_API_URL ?? "http://localhost:3001";
 
   return defineConfig({
@@ -30,6 +30,7 @@ export function reactRsbuildConfig({ dirname = process.cwd(), plugins = [], alia
           changeOrigin: true,
         },
       },
+      ...server,
     },
     tools: {
       postcss: {
@@ -47,6 +48,7 @@ export function reactRsbuildConfig({ dirname = process.cwd(), plugins = [], alia
         return config;
       },
     },
+    ...other,
   });
 }
 
