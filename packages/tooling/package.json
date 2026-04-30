@@ -6,6 +6,6 @@
   "exports": {
     "./eslint": "./eslint.config.js",
     "./tsconfig/base": "./tsconfig.base.json",
-    "./vite/react": "./vite.react.js"
+    "./rsbuild/react": "./rsbuild.react.js"
   }
 }

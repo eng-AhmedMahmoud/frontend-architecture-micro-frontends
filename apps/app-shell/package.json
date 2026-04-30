@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "dev": "rsbuild dev",
+    "build": "tsc --noEmit && rsbuild build",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "preview": "vite preview"
+    "preview": "rsbuild preview"
   },
   "dependencies": {
     "@commerceos/shared": "*",
