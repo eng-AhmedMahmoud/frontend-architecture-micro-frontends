@@ -1,20 +1,25 @@
 import { dirnameFromMetaUrl, reactRsbuildConfig } from "@commerceos/tooling/rsbuild/react";
 
+const shared = {
+  react: { singleton: true, eager: true, requiredVersion: false },
+  "react-dom": { singleton: true, eager: true, requiredVersion: false },
+  "@tanstack/react-query": { singleton: true, eager: true, requiredVersion: false },
+  "@commerceos/shared": { singleton: true, eager: true, requiredVersion: false },
+  "@commerceos/ui": { singleton: true, eager: true, requiredVersion: false },
+};
+
 export default reactRsbuildConfig({
-    dirname: dirnameFromMetaUrl(import.meta.url),
-    server: {
-        port: 3000,
+  dirname: dirnameFromMetaUrl(import.meta.url),
+  server: {
+    port: 3000,
+  },
+  moduleFederation: {
+    options: {
+      name: "host",
+      remotes: {
+        analytics: "analytics@http://localhost:3002/remoteEntry.js",
+      },
+      shared,
     },
-    moduleFederation: {
-        options: {
-            name: 'host',
-            remotes: {
-                analytics: 'analytics@http://localhost:3002/remoteEntry.js',
-            }
-        },
-        shared: {
-            react: { singleton: true },
-            'react-dom': { singleton: true }
-        }
-    }
+  },
 });
