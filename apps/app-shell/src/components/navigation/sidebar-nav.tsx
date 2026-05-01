@@ -1,8 +1,11 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { CircleUserRound, EllipsisVertical, LogOut, Store } from "lucide-react";
+import { fetchOrders } from "@commerceos/shared/api/orders";
 import { useAuth } from "@commerceos/shared/providers/use-auth";
 import { navItems } from "@/components/navigation/nav-items";
 import {
+  Badge,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -17,6 +20,13 @@ export function SidebarNav() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const navigate = useNavigate();
   const { session, hasPermission, logout } = useAuth();
+  const canViewOrders = hasPermission("orders.view");
+  const { data: orders } = useQuery({
+    queryKey: ["orders"],
+    queryFn: fetchOrders,
+    enabled: Boolean(session && canViewOrders),
+  });
+  const fulfilledOrdersCount = orders?.filter((order) => order.status === "fulfilled").length ?? 0;
 
   return (
     <div className="flex h-full flex-col">
@@ -45,7 +55,12 @@ export function SidebarNav() {
               )}
             >
               <Icon className="h-4 w-4" />
-              {item.label}
+              <span>{item.label}</span>
+              {item.to === "/orders" ? (
+                <Badge variant="success" className="ml-auto px-2 py-0 text-[11px]">
+                  {fulfilledOrdersCount}
+                </Badge>
+              ) : null}
             </Link>
           );
         })}
