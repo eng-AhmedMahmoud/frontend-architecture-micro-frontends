@@ -108,9 +108,12 @@ export function useCommandMenuItems({ open, onOpenChange, query }: UseCommandMen
   });
 
   return useMemo(() => {
-    const navigateAndClose = async (callback: () => Promise<unknown>) => {
+    const navigateAndClose = async (callback: () => Promise<unknown> | unknown) => {
       onOpenChange(false);
       await callback();
+    };
+    const navigateToMfe = (path: string) => {
+      window.location.assign(path);
     };
 
     const baseItems: CommandItem[] = [
@@ -162,7 +165,7 @@ export function useCommandMenuItems({ open, onOpenChange, query }: UseCommandMen
         keywords: "customers people buyers segments spend",
         icon: Users,
         permission: "customers.view",
-        run: () => navigateAndClose(() => navigate({ to: "/customers" })),
+        run: () => navigateAndClose(() => navigateToMfe("/customers")),
       },
       {
         id: "go-discounts",
@@ -292,7 +295,7 @@ export function useCommandMenuItems({ open, onOpenChange, query }: UseCommandMen
       keywords: `customer ${customer.name} ${customer.email} ${customer.segment} ${customer.tags.join(" ")}`,
       icon: Users,
       permission: "customers.view",
-      run: () => navigateAndClose(() => navigate({ to: "/customers/$customerId", params: { customerId: customer.id } })),
+      run: () => navigateAndClose(() => navigateToMfe(`/customers/${customer.id}`)),
     }));
 
     const userItems: CommandItem[] = accountUsers.map((user) => ({

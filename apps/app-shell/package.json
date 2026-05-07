@@ -31,7 +31,6 @@
     "tailwind-merge": "^2.5.4",
     "@commerceos/analytics": "*",
     "@commerceos/catalog": "*",
-    "@commerceos/customers": "*",
     "@commerceos/discounts": "*",
     "@commerceos/inventory": "*",
     "@commerceos/orders": "*",

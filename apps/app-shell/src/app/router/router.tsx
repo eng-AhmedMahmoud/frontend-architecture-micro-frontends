@@ -9,8 +9,6 @@ import ProductDetailPage from "@/routes/catalog/$productId";
 import InventoryPage from "@/routes/inventory/index";
 import OrdersPage from "@/routes/orders/index";
 import OrderDetailPage from "@/routes/orders/$orderId";
-import CustomersPage from "@/routes/customers/index";
-import CustomerDetailPage from "@/routes/customers/$customerId";
 import DiscountsPage from "@/routes/discounts/index";
 import NewDiscountPage from "@/routes/discounts/new";
 import DiscountDetailPage from "@/routes/discounts/$discountId";
@@ -78,18 +76,6 @@ const orderDetailRoute = createRoute({
   component: OrderDetailPage,
 });
 
-const customersRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/customers",
-  component: CustomersPage,
-});
-
-const customerDetailRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/customers/$customerId",
-  component: CustomerDetailPage,
-});
-
 const discountsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/discounts",
@@ -153,8 +139,6 @@ const routeTree = rootRoute.addChildren([
   inventoryRoute,
   ordersRoute,
   orderDetailRoute,
-  customersRoute,
-  customerDetailRoute,
   discountsRoute,
   newDiscountRoute,
   discountDetailRoute,
