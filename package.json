@@ -11,7 +11,7 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "serve:mfes": "node scripts/serve-mfes.mjs",
+    "serve:production": "node scripts/serve-mfes.mjs",
     "preview": "turbo preview"
   },
   "packageManager": "npm@11.8.0",
