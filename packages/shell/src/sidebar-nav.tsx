@@ -1,9 +1,6 @@
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { CircleUserRound, EllipsisVertical, LogOut, Store } from "lucide-react";
-import { fetchOrders } from "@commerceos/shared/api/orders";
 import { useAuth } from "@commerceos/shared/providers/use-auth";
-import { navItems } from "@/components/navigation/nav-items";
+import { ROLE_LABELS } from "@commerceos/shared/lib/auth";
 import {
   Badge,
   DropdownMenu,
@@ -14,19 +11,15 @@ import {
   DropdownMenuTrigger,
 } from "@commerceos/ui";
 import { cn } from "@commerceos/ui";
-import { ROLE_LABELS } from "@commerceos/shared/lib/auth";
+import { navItems } from "./nav-items";
 
-export function SidebarNav() {
-  const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const navigate = useNavigate();
+export interface SidebarNavProps {
+  pathname: string;
+  navBadges?: Partial<Record<string, string | number>>;
+}
+
+export function SidebarNav({ pathname, navBadges = {} }: SidebarNavProps) {
   const { session, hasPermission, logout } = useAuth();
-  const canViewOrders = hasPermission("orders.view");
-  const { data: orders } = useQuery({
-    queryKey: ["orders"],
-    queryFn: fetchOrders,
-    enabled: Boolean(session && canViewOrders),
-  });
-  const fulfilledOrdersCount = orders?.filter((order) => order.status === "fulfilled").length ?? 0;
 
   return (
     <div className="flex h-full flex-col">
@@ -45,10 +38,12 @@ export function SidebarNav() {
         {navItems.filter((item) => hasPermission(item.permission)).map((item) => {
           const isActive = pathname === item.to || (item.to !== "/" && pathname.startsWith(item.to));
           const Icon = item.icon;
+          const badge = navBadges[item.to];
+
           return (
-            <Link
+            <a
               key={item.to}
-              to={item.to}
+              href={item.to}
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
                 isActive && "bg-accent text-foreground",
@@ -56,12 +51,12 @@ export function SidebarNav() {
             >
               <Icon className="h-4 w-4" />
               <span>{item.label}</span>
-              {item.to === "/orders" ? (
+              {badge !== undefined ? (
                 <Badge variant="success" className="ml-auto px-2 py-0 text-[11px]">
-                  {fulfilledOrdersCount}
+                  {badge}
                 </Badge>
               ) : null}
-            </Link>
+            </a>
           );
         })}
       </nav>
@@ -103,9 +98,11 @@ export function SidebarNav() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => void navigate({ to: "/profile" })}>
-                  <CircleUserRound className="h-4 w-4 text-muted-foreground" />
-                  <span>Account</span>
+                <DropdownMenuItem asChild>
+                  <a href="/profile">
+                    <CircleUserRound className="h-4 w-4 text-muted-foreground" />
+                    <span>Account</span>
+                  </a>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => void logout()}>

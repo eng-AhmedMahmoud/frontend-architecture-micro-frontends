@@ -1,7 +1,8 @@
 import { Navigate, Outlet, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@commerceos/shared/providers/use-auth";
 import { LoadingState } from "@commerceos/shared/feedback/loading-state";
-import { AppShell } from "@/components/app-shell/app-shell";
+import { AppFrame } from "@commerceos/shell";
+import { CommandMenu } from "@commerceos/search";
 import { getViewPermissionForPath } from "@commerceos/shared/lib/auth";
 
 export function RootComponent() {
@@ -26,9 +27,12 @@ export function RootComponent() {
   }
 
   return (
-    <AppShell>
+    <AppFrame
+      pathname={pathname}
+      commandMenu={({ open, onOpenChange }) => <CommandMenu open={open} onOpenChange={onOpenChange} />}
+    >
       <Outlet />
-    </AppShell>
+    </AppFrame>
   );
 }
 

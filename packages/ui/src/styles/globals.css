@@ -2,6 +2,7 @@
 
 @source "../../../../apps";
 @source "../../../shared/src";
+@source "../../../shell/src";
 @source "..";
 
 @custom-variant dark (&:where(.dark, .dark *));

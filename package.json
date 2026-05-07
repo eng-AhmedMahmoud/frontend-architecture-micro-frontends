@@ -11,6 +11,7 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
+    "serve:production": "node scripts/serve-mfes.mjs",
     "preview": "turbo preview"
   },
   "packageManager": "npm@11.8.0",
@@ -30,6 +31,7 @@
     "eslint-plugin-boundaries": "^6.0.2",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.14",
+    "express": "^5.2.1",
     "globals": "^15.11.0",
     "tailwindcss": "^4.2.2",
     "turbo": "^2.9.6",
