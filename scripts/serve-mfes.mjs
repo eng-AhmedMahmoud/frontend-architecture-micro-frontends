@@ -52,8 +52,8 @@ function serveSpa({ route, dir }) {
 
   if (route !== "/") {
     server.use((req, res, next) => {
-      if ((req.method === "GET" || req.method === "HEAD") && req.path === route) {
-        res.redirect(301, `${route}/`);
+      if ((req.method === "GET" || req.method === "HEAD") && req.path === `${route}/`) {
+        res.redirect(301, route);
         return;
       }
 
@@ -61,7 +61,7 @@ function serveSpa({ route, dir }) {
     });
   }
 
-  server.use(route, express.static(appDir, { index: false }));
+  server.use(route, express.static(appDir, { index: false, redirect: false }));
   server.use(route, (req, res, next) => {
     if (req.method !== "GET" && req.method !== "HEAD") {
       next();
@@ -76,13 +76,15 @@ if (config.apiProxy) {
   server.use("/api", proxyApi(config.apiProxy));
 }
 
-for (const appConfig of config.apps) {
+const appsByMostSpecificRoute = [...config.apps].sort((first, second) => second.route.length - first.route.length);
+
+for (const appConfig of appsByMostSpecificRoute) {
   serveSpa(appConfig);
 }
 
 const listener = server.listen(config.port, config.host, () => {
   console.log(`MFE server running at http://${config.host}:${config.port}`);
-  for (const appConfig of config.apps) {
+  for (const appConfig of appsByMostSpecificRoute) {
     console.log(`${appConfig.route} -> ${appConfig.dir}`);
   }
 });
