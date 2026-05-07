@@ -1,28 +1,30 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { Command, Menu, Search } from "lucide-react";
-import { useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@commerceos/shared/providers/use-auth";
-import { CommandMenu } from "@commerceos/search";
-import { SidebarNav } from "@/components/navigation/sidebar-nav";
 import { ThemeToggle } from "@commerceos/shared/components/theme-toggle";
-import { Button } from "@commerceos/ui";
-import { Select } from "@commerceos/ui";
-import { Sheet, SheetContent, SheetTrigger } from "@commerceos/ui";
-import { navItems } from "@/components/navigation/nav-items";
 import { ROLE_LABELS } from "@commerceos/shared/lib/auth";
+import { Button, Select, Sheet, SheetContent, SheetTrigger } from "@commerceos/ui";
+import { getPageTitle } from "./page-title";
+import { SidebarNav } from "./sidebar-nav";
 
-function getPageTitle(pathname: string) {
-  if (pathname === "/") return "Dashboard";
-  const matched = navItems.find((item) => item.to !== "/" && pathname.startsWith(item.to));
-  return matched?.label ?? "CommerceOS Admin";
+export interface CommandMenuSlotProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-interface AppShellProps {
+export interface AppFrameProps {
   children: ReactNode;
+  pathname?: string;
+  navBadges?: Partial<Record<string, string | number>>;
+  commandMenu?: (props: CommandMenuSlotProps) => ReactNode;
 }
 
-export function AppShell({ children }: AppShellProps) {
-  const pathname = useRouterState({ select: (state) => state.location.pathname });
+export function AppFrame({
+  children,
+  pathname = typeof window === "undefined" ? "/" : window.location.pathname,
+  navBadges,
+  commandMenu,
+}: AppFrameProps) {
   const [commandMenuOpen, setCommandMenuOpen] = useState(false);
   const { session, switchAccount } = useAuth();
 
@@ -40,10 +42,10 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="h-screen overflow-hidden bg-background">
-      <CommandMenu open={commandMenuOpen} onOpenChange={setCommandMenuOpen} />
+      {commandMenu?.({ open: commandMenuOpen, onOpenChange: setCommandMenuOpen })}
       <div className="flex h-full">
         <aside className="hidden h-full w-72 overflow-y-auto border-r bg-card p-4 lg:block">
-          <SidebarNav />
+          <SidebarNav pathname={pathname} navBadges={navBadges} />
         </aside>
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
           <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur">
@@ -55,7 +57,7 @@ export function AppShell({ children }: AppShellProps) {
                   </Button>
                 </SheetTrigger>
                 <SheetContent className="lg:hidden">
-                  <SidebarNav />
+                  <SidebarNav pathname={pathname} navBadges={navBadges} />
                 </SheetContent>
               </Sheet>
               <div className="min-w-0 flex-1">
@@ -78,21 +80,23 @@ export function AppShell({ children }: AppShellProps) {
                 </div>
               ) : null}
               <ThemeToggle />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setCommandMenuOpen(true)}
-                className="hidden w-full max-w-sm items-center justify-between gap-3 md:flex"
-              >
-                <span className="flex min-w-0 items-center gap-2 text-muted-foreground">
-                  <Search className="h-4 w-4" />
-                  <span className="truncate">Search, jump, or run a command...</span>
-                </span>
-                <span className="flex items-center gap-1 rounded-md border bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
-                  <Command className="h-3 w-3" />
-                  <span>K</span>
-                </span>
-              </Button>
+              {commandMenu ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setCommandMenuOpen(true)}
+                  className="hidden w-full max-w-sm items-center justify-between gap-3 md:flex"
+                >
+                  <span className="flex min-w-0 items-center gap-2 text-muted-foreground">
+                    <Search className="h-4 w-4" />
+                    <span className="truncate">Search, jump, or run a command...</span>
+                  </span>
+                  <span className="flex items-center gap-1 rounded-md border bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
+                    <Command className="h-3 w-3" />
+                    <span>K</span>
+                  </span>
+                </Button>
+              ) : null}
             </div>
           </header>
           <main className="min-h-0 flex-1 overflow-y-auto px-4 py-6 lg:px-8">
