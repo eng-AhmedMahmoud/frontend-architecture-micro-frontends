@@ -3,7 +3,7 @@ import { dirnameFromMetaUrl, reactRsbuildConfig } from "@commerceos/tooling/rsbu
 export default reactRsbuildConfig({
     dirname: dirnameFromMetaUrl(import.meta.url),
     server: {
-        port: 3000,
+        port: Number(process.env.TURBO_MFE_PORT ?? 3000),
     },
     moduleFederation: {
         options: {

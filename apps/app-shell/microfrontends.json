@@ -1,0 +1,30 @@
+{
+  "$schema": "https://turborepo.dev/microfrontends/schema.json",
+  "options": {
+    "localProxyPort": 3024
+  },
+  "applications": {
+    "app-shell": {
+      "packageName": "@commerceos/app-shell",
+      "development": {
+        "local": {
+          "port": 3000
+        }
+      }
+    },
+    "customers": {
+      "packageName": "@commerceos/customers",
+      "development": {
+        "local": {
+          "port": 3002
+        }
+      },
+      "routing": [
+        {
+          "group": "customers",
+          "paths": ["/customers", "/customers/:path*"]
+        }
+      ]
+    }
+  }
+}
