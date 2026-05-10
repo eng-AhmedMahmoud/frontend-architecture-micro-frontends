@@ -9,9 +9,9 @@ export default createRsbuildConfig({
       "./index.screen": "./src/screens/analytics.index.tsx",
     },
     shared: {
-      react: { singleton: true },
-      "react-dom": { singleton: true },
-      "@tanstack/react-query": { singleton: true }
+      react: { singleton: true, import: false },
+      "react-dom": { singleton: true, import: false },
+      "@tanstack/react-query": { singleton: true, import: false }
     },
   },
 });
