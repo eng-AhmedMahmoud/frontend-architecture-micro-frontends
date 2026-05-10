@@ -109,6 +109,7 @@ function avatarUploadPlugin({ appRoot = process.cwd() } = {}) {
 
 export function createRsbuildConfig({ appRoot = process.cwd(), port, moduleFederation } = {}) {
   const apiTarget = process.env.COMMERCEOS_API_URL ?? "http://localhost:4000";
+  const outputAssetPrefix = `http://localhost:${port}/`
 
   return defineConfig({
     plugins: [pluginReact(), avatarUploadPlugin({ appRoot })],
@@ -119,8 +120,13 @@ export function createRsbuildConfig({ appRoot = process.cwd(), port, moduleFeder
     },
     moduleFederation: moduleFederation
       ? {
-          options: moduleFederation,
-        }
+        options: moduleFederation,
+      }
+      : undefined,
+    output: outputAssetPrefix
+      ? {
+        assetPrefix: outputAssetPrefix,
+      }
       : undefined,
     server: {
       port,
