@@ -49,3 +49,5 @@ export function OrderStatusDistributionChart({ data }: OrderStatusDistributionCh
     </Card>
   );
 }
+
+export default OrderStatusDistributionChart
