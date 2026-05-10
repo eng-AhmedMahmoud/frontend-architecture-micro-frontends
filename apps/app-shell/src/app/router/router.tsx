@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, createRoute, createRouter } from "@tanstack/react-router";
 import { NotFoundComponent, RootComponent } from "./root";
@@ -18,8 +19,18 @@ import CustomersPage from "@commerceos/customers/screens/customers.index";
 import DiscountDetailPage from "@commerceos/discounts/screens/discounts.detail";
 import DiscountsPage from "@commerceos/discounts/screens/discounts.index";
 import NewDiscountPage from "@commerceos/discounts/screens/discounts.new";
-import AnalyticsPage from "@commerceos/analytics/screens/analytics.index";
 import SettingsPage from "@commerceos/settings/screens/settings.index";
+import { LoadingState } from "@commerceos/shared/components/feedback/loading-state";
+
+const FederatedAnalyticsPage = lazy(() => import("analytics/index.screen"));
+
+function AnalyticsPage() {
+  return (
+    <Suspense fallback={<LoadingState label="Loading analytics module..." />}>
+      <FederatedAnalyticsPage />
+    </Suspense>
+  );
+}
 
 export interface RouterContext {
   queryClient: QueryClient;
