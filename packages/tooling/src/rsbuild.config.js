@@ -107,7 +107,7 @@ function avatarUploadPlugin({ appRoot = process.cwd() } = {}) {
   };
 }
 
-export function createRsbuildConfig({ appRoot = process.cwd() } = {}) {
+export function createRsbuildConfig({ appRoot = process.cwd(), port } = {}) {
   const apiTarget = process.env.COMMERCEOS_API_URL ?? "http://localhost:4000";
 
   return defineConfig({
@@ -118,6 +118,7 @@ export function createRsbuildConfig({ appRoot = process.cwd() } = {}) {
       },
     },
     server: {
+      port,
       proxy: {
         "/api": {
           target: apiTarget,
