@@ -1091,6 +1091,7 @@ export function updateInventory(accountId: string, id: string, payload: Partial<
     };
   });
   if (updatedProductId) syncProductInventory(accountId, updatedProductId);
+  persistStore();
   return clone(tenant.inventory.find((item) => item.id === id) ?? null);
 }
 
@@ -1131,6 +1132,7 @@ export function updateOrder(accountId: string, id: string, payload: Partial<Orde
     timestamp: "2026-04-18",
     summary: "Order workflow updated.",
   });
+  persistStore();
   return getOrder(accountId, id);
 }
 
@@ -1195,6 +1197,7 @@ export function createDiscount(accountId: string, payload: Omit<Discount, "id" |
     timestamp: "2026-04-18",
     summary: "New rule-based discount created.",
   });
+  persistStore();
   return clone(next);
 }
 
@@ -1209,6 +1212,7 @@ export function updateDiscount(accountId: string, id: string, payload: Partial<D
     timestamp: "2026-04-18",
     summary: "Discount settings updated.",
   });
+  persistStore();
   return getDiscount(accountId, id);
 }
 
@@ -1263,6 +1267,7 @@ export function updateAccount(accountId: string, payload: Partial<Account>) {
       ...payload.profile,
     },
   };
+  persistStore();
   return clone(accountsById[accountId]);
 }
 
@@ -1279,6 +1284,7 @@ export function updateSettings(accountId: string, payload: Partial<SettingsData>
     taxes: { ...tenant.settings.taxes, ...payload.taxes },
     notifications: { ...tenant.settings.notifications, ...payload.notifications },
   };
+  persistStore();
   return clone(tenant.settings);
 }
 
@@ -1374,5 +1380,6 @@ export function updateAccountPermissions(accountId: string, payload: Partial<Acc
     admin: payload.admin ? [...payload.admin] : [...permissionPoliciesByAccountId[accountId].admin],
     user: payload.user ? [...payload.user] : [...permissionPoliciesByAccountId[accountId].user],
   };
+  persistStore();
   return clone(permissionPoliciesByAccountId[accountId]);
 }

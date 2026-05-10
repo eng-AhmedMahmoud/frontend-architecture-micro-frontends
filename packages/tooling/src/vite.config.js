@@ -105,7 +105,25 @@ function avatarUploadPlugin(appRoot) {
 }
 
 export function createViteConfig({ appRoot = process.cwd() } = {}) {
+  const apiTarget = process.env.COMMERCEOS_API_URL ?? "http://localhost:4000";
+
   return defineConfig({
     plugins: [react(), tailwindcss(), avatarUploadPlugin(appRoot)],
+    server: {
+      proxy: {
+        "/api": {
+          target: apiTarget,
+          changeOrigin: true,
+        },
+      },
+    },
+    preview: {
+      proxy: {
+        "/api": {
+          target: apiTarget,
+          changeOrigin: true,
+        },
+      },
+    },
   });
 }
