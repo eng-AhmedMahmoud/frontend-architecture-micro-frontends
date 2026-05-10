@@ -107,7 +107,7 @@ function avatarUploadPlugin({ appRoot = process.cwd() } = {}) {
   };
 }
 
-export function createRsbuildConfig({ appRoot = process.cwd(), port } = {}) {
+export function createRsbuildConfig({ appRoot = process.cwd(), port, moduleFederation } = {}) {
   const apiTarget = process.env.COMMERCEOS_API_URL ?? "http://localhost:4000";
 
   return defineConfig({
@@ -117,6 +117,11 @@ export function createRsbuildConfig({ appRoot = process.cwd(), port } = {}) {
         index: "./src/main.tsx",
       },
     },
+    moduleFederation: moduleFederation
+      ? {
+          options: moduleFederation,
+        }
+      : undefined,
     server: {
       port,
       proxy: {
