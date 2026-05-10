@@ -11,6 +11,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@commerceos/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@commerceos/ui/chart";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@commerceos/ui/table";
 import { formatCurrency, formatDate, formatNumber } from "@commerceos/shared/lib/utils";
+import { lazy, Suspense } from "react";
+
+const FederatedOrderStatusDistributionChart = lazy(() => import("analytics/order-status-distribution-chart"));
 
 const SEGMENT_COLORS = ["hsl(217 91% 60%)", "hsl(173 58% 39%)", "hsl(38 92% 50%)", "hsl(262 83% 58%)", "hsl(8 84% 60%)"];
 
@@ -99,39 +102,9 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Order Distribution</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={{ value: { label: "Orders", color: "hsl(217 91% 60%)" } }} className="h-[220px]">
-              <BarChart data={orderDistribution} layout="vertical" margin={{ left: 8, right: 32 }}>
-                <CartesianGrid horizontal={false} />
-                <XAxis type="number" hide />
-                <YAxis type="category" dataKey="label" hide />
-                <ChartTooltip content={<ChartTooltipContent hideLabel formatter={(value) => `${value} orders`} />} />
-                <Bar dataKey="value" radius={10}>
-                  {orderDistribution.map((entry) => (
-                    <Cell key={entry.label} fill={entry.fill} />
-                  ))}
-                  <LabelList
-                    dataKey="label"
-                    position="insideLeft"
-                    offset={12}
-                    className="fill-white text-[12px] font-medium"
-                  />
-                  <LabelList
-                    dataKey="value"
-                    position="right"
-                    offset={8}
-                    className="fill-muted-foreground text-[12px] font-medium"
-                    formatter={(value) => `${value ?? ""}`}
-                  />
-                </Bar>
-              </BarChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+        <Suspense fallback={<LoadingState label="Loading order distribution..." />}>
+          <FederatedOrderStatusDistributionChart data={data.orderDistribution} />
+        </Suspense>
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[2fr,1fr]">
