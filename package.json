@@ -15,6 +15,7 @@
     "boundaries": "turbo boundaries"
   },
   "devDependencies": {
+    "@module-federation/rsbuild-plugin": "^2.4.0",
     "turbo": "^2.9.12"
   },
   "dependencies": {

@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 import { defineConfig } from "@rsbuild/core";
 import { pluginReact } from "@rsbuild/plugin-react";
 import tailwindcss from "@tailwindcss/postcss";
+import { pluginModuleFederation } from "@module-federation/rsbuild-plugin";
 
 function getExtensionFromMimeType(mimeType) {
   switch (mimeType) {
@@ -111,18 +112,19 @@ export function createRsbuildConfig({ appRoot = process.cwd(), port, moduleFeder
   const apiTarget = process.env.COMMERCEOS_API_URL ?? "http://localhost:4000";
   const outputAssetPrefix = `http://localhost:${port}/`
 
+  const plugins = [pluginReact(), avatarUploadPlugin({ appRoot })];
+
+  if (moduleFederation) {
+    plugins.push(pluginModuleFederation(moduleFederation));
+  }
+
   return defineConfig({
-    plugins: [pluginReact(), avatarUploadPlugin({ appRoot })],
+    plugins,
     source: {
       entry: {
         index: "./src/main.tsx",
       },
     },
-    moduleFederation: moduleFederation
-      ? {
-        options: moduleFederation,
-      }
-      : undefined,
     output: outputAssetPrefix
       ? {
         assetPrefix: outputAssetPrefix,

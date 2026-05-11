@@ -14,5 +14,6 @@ export default createRsbuildConfig({
       "react-dom": { singleton: true, import: false },
       "@tanstack/react-query": { singleton: true, import: false }
     },
+    dts: false,
   },
 });
