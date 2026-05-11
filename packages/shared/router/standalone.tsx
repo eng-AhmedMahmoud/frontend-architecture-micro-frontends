@@ -12,12 +12,16 @@ export interface StandaloneRoute {
   component: RouteComponent;
 }
 
-export function createStandaloneRouter(routes: StandaloneRoute[]) {
+interface StandaloneRouterOptions {
+  rootComponent?: RouteComponent;
+}
+
+export function createStandaloneRouter(routes: StandaloneRoute[], options: StandaloneRouterOptions = {}) {
   const indexRouteDefinition = routes.find((route) => route.path === "/");
   const childRouteDefinitions = routes.filter((route) => route.path !== "/");
 
   const rootRoute = createRootRouteWithContext<StandaloneRouterContext>()({
-    component: StandaloneRoot,
+    component: options.rootComponent ?? StandaloneRoot,
   });
 
   const indexRoute = createRoute({

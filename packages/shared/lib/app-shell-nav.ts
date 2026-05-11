@@ -1,5 +1,4 @@
 import type { LucideIcon } from "lucide-react";
-import type { PermissionKey } from "@commerceos/shared/domain/commerce/users.types";
 import {
   BarChart3,
   LayoutDashboard,
@@ -11,8 +10,16 @@ import {
   Tags,
   Users,
 } from "lucide-react";
+import type { PermissionKey } from "@commerceos/shared/domain/commerce/users.types";
 
-export const navItems = [
+export interface AppShellNavItem {
+  to: string;
+  label: string;
+  icon: LucideIcon;
+  permission: PermissionKey;
+}
+
+export const appShellNavItems = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, permission: "dashboard.view" },
   { to: "/catalog", label: "Catalog", icon: Package, permission: "catalog.view" },
   { to: "/inventory", label: "Inventory", icon: PackageSearch, permission: "inventory.view" },
@@ -22,4 +29,4 @@ export const navItems = [
   { to: "/analytics", label: "Analytics", icon: BarChart3, permission: "analytics.view" },
   { to: "/users", label: "Users", icon: ShieldCheck, permission: "settings.users.manage" },
   { to: "/settings", label: "Settings", icon: Settings, permission: "settings.view" },
-] as const satisfies ReadonlyArray<{ to: string; label: string; icon: LucideIcon; permission: PermissionKey }>;
+] as const satisfies ReadonlyArray<AppShellNavItem>;
