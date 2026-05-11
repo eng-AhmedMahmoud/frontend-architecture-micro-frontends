@@ -35,14 +35,25 @@ export function SidebarNav() {
         {navItems.filter((item) => hasPermission(item.permission)).map((item) => {
           const isActive = pathname === item.to || (item.to !== "/" && pathname.startsWith(item.to));
           const Icon = item.icon;
+          const navItemClassName = cn(
+            "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
+            isActive && "bg-accent text-foreground",
+          );
+
+          if (item.to === "/analytics") {
+            return (
+              <a key={item.to} href={item.to} className={navItemClassName}>
+                <Icon className="h-4 w-4" />
+                {item.label}
+              </a>
+            );
+          }
+
           return (
             <Link
               key={item.to}
               to={item.to}
-              className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
-                isActive && "bg-accent text-foreground",
-              )}
+              className={navItemClassName}
             >
               <Icon className="h-4 w-4" />
               {item.label}

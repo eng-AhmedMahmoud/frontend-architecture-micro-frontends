@@ -107,12 +107,23 @@ function avatarUploadPlugin({ appRoot = process.cwd() } = {}) {
   };
 }
 
-export function createRsbuildConfig({ appRoot = process.cwd(), port, moduleFederation } = {}) {
+export function createRsbuildConfig({
+  appRoot = process.cwd(),
+  port,
+  moduleFederation,
+  analyticsProxyTarget,
+  devAssetPrefix,
+  assetPrefix,
+  serverBase,
+} = {}) {
   const apiTarget = process.env.COMMERCEOS_API_URL ?? "http://localhost:4000";
-  const outputAssetPrefix = `http://localhost:${port}/`
+  const outputAssetPrefix = assetPrefix ?? `http://localhost:${port}/`
 
   return defineConfig({
-    plugins: [pluginReact(), avatarUploadPlugin({ appRoot })],
+    plugins: [
+      pluginReact(),
+      avatarUploadPlugin({ appRoot }),
+    ],
     source: {
       entry: {
         index: "./src/main.tsx",
@@ -128,9 +139,23 @@ export function createRsbuildConfig({ appRoot = process.cwd(), port, moduleFeder
         assetPrefix: outputAssetPrefix,
       }
       : undefined,
+    dev: devAssetPrefix
+      ? {
+        assetPrefix: devAssetPrefix,
+      }
+      : undefined,
     server: {
       port,
+      ...(serverBase ? { base: serverBase } : {}),
       proxy: {
+        ...(analyticsProxyTarget
+          ? {
+            "/analytics/": {
+              target: analyticsProxyTarget,
+              changeOrigin: true,
+            },
+          }
+          : {}),
         "/api": {
           target: apiTarget,
           changeOrigin: true,

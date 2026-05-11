@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, createRoute, createRouter } from "@tanstack/react-router";
 import { NotFoundComponent, RootComponent } from "./root";
@@ -18,7 +19,6 @@ import CustomersPage from "@commerceos/customers/screens/customers.index";
 import DiscountDetailPage from "@commerceos/discounts/screens/discounts.detail";
 import DiscountsPage from "@commerceos/discounts/screens/discounts.index";
 import NewDiscountPage from "@commerceos/discounts/screens/discounts.new";
-import AnalyticsPage from "@commerceos/analytics/screens/analytics.index";
 import SettingsPage from "@commerceos/settings/screens/settings.index";
 
 export interface RouterContext {
@@ -108,10 +108,18 @@ const discountDetailRoute = createRoute({
   component: DiscountDetailPage,
 });
 
-const analyticsRoute = createRoute({
+function AnalyticsRedirectPage() {
+  useEffect(() => {
+    window.location.replace("/analytics/");
+  }, []);
+
+  return null;
+}
+
+const analyticsRedirectRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/analytics",
-  component: AnalyticsPage,
+  component: AnalyticsRedirectPage,
 });
 
 const settingsRoute = createRoute({
@@ -158,7 +166,7 @@ const routeTree = rootRoute.addChildren([
   discountsRoute,
   newDiscountRoute,
   discountDetailRoute,
-  analyticsRoute,
+  analyticsRedirectRoute,
   usersRoute,
   userDetailRoute,
   rolesPermissionsRoute,

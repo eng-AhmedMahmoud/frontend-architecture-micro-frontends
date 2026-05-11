@@ -37,3 +37,32 @@ npm run typecheck
 - There is no real backend.
 - Mutations update in-memory mock state through MSW handlers.
 - The structure intentionally stays centralized and route-oriented to reflect an early frontend monolith.
+
+## Standalone Analytics Routing
+
+The `analytics` app can run independently and still be served from the same host as app-shell.
+
+- Local development:
+  - `app-shell` runs on `http://localhost:3000`
+  - `analytics` runs on `http://localhost:3001`
+  - app-shell dev server proxies `/analytics` requests to `http://localhost:3001`
+- Production:
+  - Deploy app-shell and analytics as separate builds
+  - Configure your gateway to forward `/analytics` and `/analytics/*` to analytics
+  - Forward all other routes to app-shell
+
+Example Nginx routing:
+
+```nginx
+location /analytics {
+  proxy_pass http://analytics_upstream;
+}
+
+location /analytics/ {
+  proxy_pass http://analytics_upstream;
+}
+
+location / {
+  proxy_pass http://app_shell_upstream;
+}
+```

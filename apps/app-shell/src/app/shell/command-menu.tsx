@@ -200,7 +200,10 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
         keywords: "analytics revenue charts reports",
         icon: ChartColumn,
         permission: "analytics.view",
-        run: () => navigateAndClose(() => navigate({ to: "/analytics" })),
+        run: () => {
+          onOpenChange(false);
+          window.location.assign("/analytics");
+        },
       },
       {
         id: "go-settings",
