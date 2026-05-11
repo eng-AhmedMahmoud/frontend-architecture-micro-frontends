@@ -12,7 +12,6 @@
     "preview": "rsbuild preview"
   },
   "dependencies": {
-    "@commerceos/analytics": "*",
     "@commerceos/authentication": "*",
     "@commerceos/catalog": "*",
     "@commerceos/customers": "*",
