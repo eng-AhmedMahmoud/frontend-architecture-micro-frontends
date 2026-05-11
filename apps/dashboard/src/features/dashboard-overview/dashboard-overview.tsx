@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, DollarSign, ShoppingCart, Users } from "lucide-react";
-import { Area, Bar, BarChart, CartesianGrid, Cell, ComposedChart, LabelList, Line, XAxis, YAxis } from "recharts";
+import { Area, Bar, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from "recharts";
 import { fetchDashboardSummary } from "../../api/dashboard.api";
 import { LoadingState } from "@commerceos/shared/components/feedback/loading-state";
 import { PageHeader } from "@commerceos/shared/components/page-header";
@@ -14,15 +14,6 @@ import { formatCurrency, formatDate, formatNumber } from "@commerceos/shared/lib
 import { lazy, Suspense } from "react";
 
 const FederatedOrderStatusDistributionChart = lazy(() => import("analytics/order-status-distribution-chart"));
-
-const SEGMENT_COLORS = ["hsl(217 91% 60%)", "hsl(173 58% 39%)", "hsl(38 92% 50%)", "hsl(262 83% 58%)", "hsl(8 84% 60%)"];
-
-function formatStatusLabel(value: string) {
-  return value
-    .split("_")
-    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
-    .join(" ");
-}
 
 export default function DashboardPage() {
   const { data, isLoading } = useQuery({
@@ -37,12 +28,6 @@ export default function DashboardPage() {
   const recentOrderRevenueTrend = data.recentOrderRevenueTrend.map((item) => ({
     ...item,
     label: new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(new Date(`${item.label}T00:00:00`)),
-  }));
-
-  const orderDistribution = data.orderDistribution.map((item, index) => ({
-    ...item,
-    label: formatStatusLabel(item.label),
-    fill: SEGMENT_COLORS[index % SEGMENT_COLORS.length],
   }));
 
   return (
