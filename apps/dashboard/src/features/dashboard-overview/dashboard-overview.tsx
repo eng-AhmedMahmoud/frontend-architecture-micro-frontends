@@ -11,11 +11,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@commerceos/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@commerceos/ui/chart";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@commerceos/ui/table";
 import { formatCurrency, formatDate, formatNumber } from "@commerceos/shared/lib/utils";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
+import { Button } from "@commerceos/ui/button";
 
 const FederatedOrderStatusDistributionChart = lazy(() => import("analytics/order-status-distribution-chart"));
 
 export default function DashboardPage() {
+  const [count, setCount] = useState(0)
   const { data, isLoading } = useQuery({
     queryKey: ["dashboard", "summary"],
     queryFn: fetchDashboardSummary,
@@ -30,12 +32,21 @@ export default function DashboardPage() {
     label: new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(new Date(`${item.label}T00:00:00`)),
   }));
 
+  function handleClick() {
+    setCount(count + 1)
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader
         title="Dashboard"
         description="Overview of revenue, order flow, customer activity, and inventory risk."
       />
+
+      <div>
+        <div>Count: {count}</div>
+        <Button onClick={handleClick}>Increment</Button>
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard title="Revenue" value={formatCurrency(data.revenue)} detail="Paid orders to date" icon={<DollarSign className="h-4 w-4" />} />
@@ -88,7 +99,7 @@ export default function DashboardPage() {
         </Card>
 
         <Suspense fallback={<LoadingState label="Loading order distribution..." />}>
-          <FederatedOrderStatusDistributionChart data={data.orderDistribution} />
+          <FederatedOrderStatusDistributionChart count={count} handleClick={handleClick} data={data.orderDistribution} />
         </Suspense>
       </div>
 

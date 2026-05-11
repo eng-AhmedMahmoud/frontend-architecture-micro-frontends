@@ -1,6 +1,7 @@
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@commerceos/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@commerceos/ui/chart";
+import { Button } from "@commerceos/ui/button";
 
 const STATUS_COLORS = ["hsl(217 91% 60%)", "hsl(173 58% 39%)", "hsl(38 92% 50%)", "hsl(8 84% 60%)", "hsl(262 83% 58%)"];
 
@@ -16,9 +17,11 @@ interface OrderStatusDistributionChartProps {
     label: string;
     value: number;
   }>;
+  count: number
+  handleClick: () => {}
 }
 
-export function OrderStatusDistributionChart({ data }: OrderStatusDistributionChartProps) {
+export function OrderStatusDistributionChart({ data, count, handleClick }: OrderStatusDistributionChartProps) {
   const orderStatusMix = data.map((item, index) => ({
     ...item,
     label: formatStatusLabel(item.label),
@@ -32,6 +35,10 @@ export function OrderStatusDistributionChart({ data }: OrderStatusDistributionCh
         <CardDescription>Current order pipeline health across all tracked states.</CardDescription>
       </CardHeader>
       <CardContent>
+        <div>
+          <div>Count: {count}</div>
+          <Button onClick={handleClick}>Increment</Button>
+        </div>
         <ChartContainer config={{ value: { label: "Orders", color: "hsl(199 89% 48%)" } }} className="h-[280px]">
           <BarChart data={orderStatusMix} layout="vertical" margin={{ left: 12 }}>
             <CartesianGrid horizontal={false} />
