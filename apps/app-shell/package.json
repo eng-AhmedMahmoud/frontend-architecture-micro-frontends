@@ -16,7 +16,6 @@
     "@commerceos/authentication": "*",
     "@commerceos/catalog": "*",
     "@commerceos/customers": "*",
-    "@commerceos/dashboard": "*",
     "@commerceos/discounts": "*",
     "@commerceos/inventory": "*",
     "@commerceos/orders": "*",

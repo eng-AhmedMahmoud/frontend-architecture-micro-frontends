@@ -112,6 +112,7 @@ export function createRsbuildConfig({
   port,
   moduleFederation,
   analyticsProxyTarget,
+  dashboardProxyTarget,
   devAssetPrefix,
   assetPrefix,
   serverBase,
@@ -152,6 +153,14 @@ export function createRsbuildConfig({
           ? {
             "/analytics/": {
               target: analyticsProxyTarget,
+              changeOrigin: true,
+            },
+          }
+          : {}),
+        ...(dashboardProxyTarget
+          ? {
+            "/dashboard/": {
+              target: dashboardProxyTarget,
               changeOrigin: true,
             },
           }

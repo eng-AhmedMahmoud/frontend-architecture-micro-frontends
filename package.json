@@ -7,11 +7,11 @@
   ],
   "packageManager": "npm@11.8.0",
   "scripts": {
-    "dev": "turbo dev --filter=@commerceos/api --filter=@commerceos/app-shell --filter=@commerceos/analytics",
+    "dev": "turbo dev --filter=@commerceos/api --filter=@commerceos/app-shell --filter=@commerceos/analytics --filter=@commerceos/dashboard",
     "build": "turbo build",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "preview": "turbo preview --filter=@commerceos/api --filter=@commerceos/app-shell --filter=@commerceos/analytics",
+    "preview": "turbo preview --filter=@commerceos/api --filter=@commerceos/app-shell --filter=@commerceos/analytics --filter=@commerceos/dashboard",
     "boundaries": "turbo boundaries"
   },
   "devDependencies": {

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, createRoute, createRouter } from "@tanstack/react-router";
 import { NotFoundComponent, RootComponent } from "./root";
-import DashboardPage from "@commerceos/dashboard/screens/dashboard.index";
+import { DashboardIframePage } from "./dashboard-iframe-page";
 import LoginPage from "@commerceos/authentication/screens/login/login";
 import ProfilePage from "@commerceos/users/screens/profile/profile.index";
 import RolesPermissionsPage from "@commerceos/users/screens/users/roles-permissions";
@@ -33,7 +33,7 @@ const rootRoute = createRootRouteWithContext<RouterContext>()({
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
-  component: DashboardPage,
+  component: DashboardIframePage,
 });
 
 const loginRoute = createRoute({

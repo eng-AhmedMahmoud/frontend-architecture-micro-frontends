@@ -7,7 +7,10 @@ import { createStandaloneRouter } from "@commerceos/shared/router/standalone";
 import DashboardPage from "@commerceos/dashboard/screens/dashboard.index";
 import "@commerceos/shared/styles/globals.css";
 
-const router = createStandaloneRouter([{ path: "/", component: DashboardPage }]);
+const router = createStandaloneRouter([
+  { path: "/", component: DashboardPage },
+  { path: "/dashboard", component: DashboardPage },
+]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
