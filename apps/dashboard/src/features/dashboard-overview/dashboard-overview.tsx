@@ -11,11 +11,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@commerceos/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@commerceos/ui/chart";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@commerceos/ui/table";
 import { formatCurrency, formatDate, formatNumber } from "@commerceos/shared/lib/utils";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 
 const FederatedOrderStatusDistributionChart = lazy(() => import("analytics/order-status-distribution-chart"));
 
+import('analytics/count.listener').then(({ listenToCount }) => {
+  listenToCount((value: number) => {
+    console.log('count', value);
+  });
+});
+
 export default function DashboardPage() {
+  const [count, setCount] = useState(0)
   const { data, isLoading } = useQuery({
     queryKey: ["dashboard", "summary"],
     queryFn: fetchDashboardSummary,
@@ -29,6 +36,10 @@ export default function DashboardPage() {
     ...item,
     label: new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(new Date(`${item.label}T00:00:00`)),
   }));
+
+  function handleClick() {
+    setCount(count + 1)
+  }
 
   return (
     <div className="space-y-6">
@@ -88,7 +99,7 @@ export default function DashboardPage() {
         </Card>
 
         <Suspense fallback={<LoadingState label="Loading order distribution..." />}>
-          <FederatedOrderStatusDistributionChart data={data.orderDistribution} />
+          <FederatedOrderStatusDistributionChart count={count} handleClick={handleClick} data={data.orderDistribution} />
         </Suspense>
       </div>
 
