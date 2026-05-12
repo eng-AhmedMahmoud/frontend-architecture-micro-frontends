@@ -2,6 +2,8 @@ import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@commerceos/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@commerceos/ui/chart";
 import { Button } from "@commerceos/ui/button";
+import { $count } from '../../../stores/count.state'
+import { useStore } from '@nanostores/react'
 
 const STATUS_COLORS = ["hsl(217 91% 60%)", "hsl(173 58% 39%)", "hsl(38 92% 50%)", "hsl(8 84% 60%)", "hsl(262 83% 58%)"];
 
@@ -17,11 +19,10 @@ interface OrderStatusDistributionChartProps {
     label: string;
     value: number;
   }>;
-  count: number
-  handleClick: () => {}
 }
 
-export function OrderStatusDistributionChart({ data, count, handleClick }: OrderStatusDistributionChartProps) {
+export function OrderStatusDistributionChart({ data }: OrderStatusDistributionChartProps) {
+  const count = useStore($count)
   const orderStatusMix = data.map((item, index) => ({
     ...item,
     label: formatStatusLabel(item.label),
@@ -37,7 +38,7 @@ export function OrderStatusDistributionChart({ data, count, handleClick }: Order
       <CardContent>
         <div>
           <div>Count: {count}</div>
-          <Button onClick={handleClick}>Increment</Button>
+          <Button onClick={() => $count.set(count + 1)}>Increment</Button>
         </div>
         <ChartContainer config={{ value: { label: "Orders", color: "hsl(199 89% 48%)" } }} className="h-[280px]">
           <BarChart data={orderStatusMix} layout="vertical" margin={{ left: 12 }}>

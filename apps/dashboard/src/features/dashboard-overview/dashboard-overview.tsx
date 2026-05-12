@@ -12,9 +12,14 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@commerceos/u
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@commerceos/ui/table";
 import { formatCurrency, formatDate, formatNumber } from "@commerceos/shared/lib/utils";
 import { lazy, Suspense, useState } from "react";
-import { Button } from "@commerceos/ui/button";
 
 const FederatedOrderStatusDistributionChart = lazy(() => import("analytics/order-status-distribution-chart"));
+
+import('analytics/count.listener').then(({ listenToCount }) => {
+  listenToCount((value: number) => {
+    console.log('count', value);
+  });
+});
 
 export default function DashboardPage() {
   const [count, setCount] = useState(0)
@@ -42,11 +47,6 @@ export default function DashboardPage() {
         title="Dashboard"
         description="Overview of revenue, order flow, customer activity, and inventory risk."
       />
-
-      <div>
-        <div>Count: {count}</div>
-        <Button onClick={handleClick}>Increment</Button>
-      </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard title="Revenue" value={formatCurrency(data.revenue)} detail="Paid orders to date" icon={<DollarSign className="h-4 w-4" />} />
