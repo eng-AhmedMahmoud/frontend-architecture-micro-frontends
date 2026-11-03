@@ -1,11 +1,9 @@
 import { createContext } from "react";
 
-export type Theme = "light" | "dark" | "system";
-export type ResolvedTheme = Exclude<Theme, "system">;
+export type Theme = "light" | "dark";
 
 export interface ThemeContextValue {
   theme: Theme;
-  resolvedTheme: ResolvedTheme;
   setTheme: (theme: Theme) => void;
 }
 

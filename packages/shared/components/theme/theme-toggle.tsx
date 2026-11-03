@@ -1,4 +1,4 @@
-import { Check, Monitor, Moon, Sun } from "lucide-react";
+import { Check, Moon, Sun } from "lucide-react";
 import { type Theme } from "@commerceos/shared/theme/theme-context";
 import { useTheme } from "@commerceos/shared/theme/use-theme";
 import {
@@ -13,12 +13,11 @@ import { cn } from "@commerceos/ui/lib/utils";
 const themeOptions: Array<{ value: Theme; label: string; icon: typeof Sun }> = [
   { value: "light", label: "Light", icon: Sun },
   { value: "dark", label: "Dark", icon: Moon },
-  { value: "system", label: "System", icon: Monitor },
 ];
 
 export function ThemeToggle() {
-  const { theme, resolvedTheme, setTheme } = useTheme();
-  const TriggerIcon = resolvedTheme === "dark" ? Moon : Sun;
+  const { theme, setTheme } = useTheme();
+  const TriggerIcon = theme === "dark" ? Moon : Sun;
 
   return (
     <DropdownMenu>
